@@ -32,6 +32,10 @@ Resources:
       EnableDnsSupport: true
       EnableDnsHostnames: true
       CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
 
   # Two public subnets, where containers can have public IP addresses
   PublicSubnetOne:
@@ -44,6 +48,11 @@ Resources:
       VpcId: !Ref 'VPC'
       CidrBlock: !FindInMap ['SubnetConfig', 'PublicOne', 'CIDR']
       MapPublicIpOnLaunch: true
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   PublicSubnetTwo:
     Type: AWS::EC2::Subnet
     Properties:
@@ -54,12 +63,21 @@ Resources:
       VpcId: !Ref 'VPC'
       CidrBlock: !FindInMap ['SubnetConfig', 'PublicTwo', 'CIDR']
       MapPublicIpOnLaunch: true
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
 
   # Setup networking resources for the public subnets. Containers
   # in the public subnets have public IP addresses and the routing table
   # sends network traffic via the internet gateway.
   InternetGateway:
     Type: AWS::EC2::InternetGateway
+    Properties: 
+      Tags: 
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
   GatewayAttachement:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -69,6 +87,11 @@ Resources:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref 'VPC'
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   PublicRoute:
     Type: AWS::EC2::Route
     DependsOn: GatewayAttachement
@@ -90,6 +113,11 @@ Resources:
   # ECS Resources
   ECSCluster:
     Type: AWS::ECS::Cluster
+    Properties:
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
 
   # A security group for client the containers we will run in Fargate.
   # Two rules, allowing network traffic from a public facing load
@@ -104,6 +132,10 @@ Resources:
     Properties:
       GroupDescription: Access to the Fargate containers
       VpcId: !Ref 'VPC'
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
   EcsSecurityGroupIngressFromPublicALB:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -127,6 +159,11 @@ Resources:
     Properties:
       GroupDescription: Access to the Fargate containers
       VpcId: !Ref 'VPC'
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   EcsSecurityGroupIngressFromPublicALB2:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -160,6 +197,11 @@ Resources:
           # Allow access to ALB from anywhere on the internet
           - CidrIp: 0.0.0.0/0
             IpProtocol: -1
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   PublicLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -174,6 +216,10 @@ Resources:
         - !Ref PublicSubnetOne
         - !Ref PublicSubnetTwo
       SecurityGroups: [!Ref 'PublicLoadBalancerSG']
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
   
   # A public facing load balancer, this is used for accepting traffic from FrontEnd ALB
   # internet and directing it to public facing microservices
@@ -186,6 +232,11 @@ Resources:
           # Allow access to ALB from anywhere on the internet
           - CidrIp: 0.0.0.0/0
             IpProtocol: -1
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   PublicLoadBalancer2:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -200,6 +251,10 @@ Resources:
         - !Ref PublicSubnetOne
         - !Ref PublicSubnetTwo
       SecurityGroups: [!Ref 'PublicLoadBalancerSG2']
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
   
   # A dummy target group is used to setup the ALB to just drop traffic
   # initially, before any real service target groups have been added.
@@ -216,6 +271,11 @@ Resources:
       Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   PublicLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     DependsOn:
@@ -243,6 +303,11 @@ Resources:
       Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+
   PublicLoadBalancerListener2:
     Type: AWS::ElasticLoadBalancingV2::Listener
     DependsOn:
@@ -262,6 +327,10 @@ Resources:
   ECSRole:
     Type: AWS::IAM::Role
     Properties:
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
@@ -298,6 +367,10 @@ Resources:
   ECSTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
