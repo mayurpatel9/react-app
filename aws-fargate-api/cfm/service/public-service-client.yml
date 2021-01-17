@@ -8,11 +8,11 @@ Parameters:
                  to locate and reference resources created by that stack.
   ServiceName:
     Type: String
-    Default: api-service
+    Default: client-service
     Description: A name for the service
   ImageUrl:
     Type: String
-    Default: mayurpatel9/api:1
+    Default: mayurpatel9/client:1
     Description: The url of a docker image that contains the application process that
                  will handle the traffic for this service
   ContainerPort:
@@ -56,17 +56,13 @@ Resources:
 
   # The task definition. This is a simple metadata description of what
   # container to run, and what resource requirements it has.
-  TaskDefinition:
+  TaskDefinition2:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: !Ref 'ServiceName'
       Cpu: !Ref 'ContainerCpu'
       Memory: !Ref 'ContainerMemory'
       NetworkMode: awsvpc
-      Tags:
-        - 
-          Key: "mp"
-          Value: "fargate-demo"
       RequiresCompatibilities:
         - FARGATE
       ExecutionRoleArn:
@@ -93,10 +89,6 @@ Resources:
     DependsOn: LoadBalancerRule
     Properties:
       ServiceName: !Ref 'ServiceName'
-      Tags:
-        - 
-          Key: "mp"
-          Value: "fargate-demo"
       Cluster:
         Fn::ImportValue:
           !Join [':', [!Ref 'StackName', 'ClusterName']]
@@ -110,14 +102,13 @@ Resources:
           AssignPublicIp: ENABLED
           SecurityGroups:
             - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'FargateContainerSecurityGroup2']]
+                !Join [':', [!Ref 'StackName', 'FargateContainerSecurityGroup']]
           Subnets:
             - Fn::ImportValue:
                 !Join [':', [!Ref 'StackName', 'PublicSubnetOne']]
             - Fn::ImportValue:
                 !Join [':', [!Ref 'StackName', 'PublicSubnetTwo']]
-      TaskDefinition: !Ref 'TaskDefinition'
-      
+      TaskDefinition: !Ref 'TaskDefinition2'
       LoadBalancers:
         - ContainerName: !Ref 'ServiceName'
           ContainerPort: !Ref 'ContainerPort'
@@ -132,14 +123,15 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 12
-      HealthCheckPath: /api/activities
+      HealthCheckPath: /
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 10
       HealthyThresholdCount: 2
       TargetType: ip
-      Name: 'ecs-a-Publi'
+      Name: 'ecs-c-Publi'
       Port: !Ref 'ContainerPort'
       Protocol: HTTP
+      UnhealthyThresholdCount: 2
       TargetGroupAttributes:
         -
           Key: "stickiness.enabled"
@@ -151,7 +143,6 @@ Resources:
         - 
           Key: "mp"
           Value: "fargate-demo"
-      UnhealthyThresholdCount: 2
       VpcId:
         Fn::ImportValue:
           !Join [':', [!Ref 'StackName', 'VPCId']]
@@ -168,5 +159,5 @@ Resources:
           Values: [!Ref 'Path']
       ListenerArn:
         Fn::ImportValue:
-          !Join [':', [!Ref 'StackName', 'PublicListener2']]
+          !Join [':', [!Ref 'StackName', 'PublicListener']]
       Priority: !Ref 'Priority'
