@@ -271,6 +271,13 @@ Resources:
       Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
+      TargetGroupAttributes:
+        -
+          Key: "stickiness.enabled"
+          Value: true
+        -
+          Key: "load_balancing.algorithm.type"
+          Value: "least_outstanding_requests"
       Tags:
         - 
           Key: "mp"
@@ -303,6 +310,17 @@ Resources:
       Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
+      TargetGroupAttributes:
+        -
+          Key: "stickiness.enabled"
+          Value: true
+        -
+          Key: "load_balancing.algorithm.type"
+          Value: "least_outstanding_requests"
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
       Tags:
         - 
           Key: "mp"
