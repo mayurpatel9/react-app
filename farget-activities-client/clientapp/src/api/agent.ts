@@ -4,7 +4,7 @@ import { config } from 'process';
 import { IActivity } from '../app/layout/model/activity';
 import { WeatherForecast } from '../store/WeatherForecasts';
 
-axios.defaults.baseURL ='http://farga-publi-1uywz0hiifp2s-258386968.us-west-2.elb.amazonaws.com/api';
+axios.defaults.baseURL ='http://localhost:5000/api';
 
 const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
 
