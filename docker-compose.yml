@@ -1,0 +1,36 @@
+version: "3.7"
+
+networks: 
+  localdev:
+    name: localdev
+
+services:
+  api:
+    build: ./aws-fargate-api
+    depends_on: 
+      - sql-server-db
+    ports: 
+      - "5000:80"
+    networks: 
+      - localdev
+  
+  sql-server-db:
+    container_name: sql-server-db
+    image: microsoft/mssql-server-linux:2017-latest
+    ports:
+      - "1400:1433"
+    environment: 
+      SA_PASSWORD: "Simple_Password"
+      ACCEPT_EULA: "Y"
+      MSSQL_TCP_PORT: "1433"
+    networks: 
+      - localdev
+  
+  client:
+    build: ./farget-activities-client/clientapp
+    depends_on:
+      - api
+    ports: 
+      - "3000:80"
+    networks: 
+      - localdev
