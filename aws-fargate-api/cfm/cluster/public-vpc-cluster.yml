@@ -151,6 +151,35 @@ Resources:
       IpProtocol: -1
       SourceSecurityGroupId: !Ref 'FargateContainerSecurityGroup'
 
+  FargateContainerDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the public facing load balancer
+      VpcId: !Ref 'VPC'
+      SecurityGroupIngress:
+          # Allow access to ALB from anywhere on the internet
+          - CidrIp: 0.0.0.0/0
+            IpProtocol: -1
+      Tags:
+        - 
+          Key: "mp"
+          Value: "fargate-demo"
+  EcsDBSecurityGroupIngressFromPublic:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from the public
+      GroupId: !Ref 'FargateContainerDBSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'PublicLoadBalancerSG'
+  EcsDBSecurityGroupIngressFromSelf:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from other containers in the same security group
+      GroupId: !Ref 'FargateContainerDBSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'FargateContainerDBSecurityGroup'
+
+
   # A security group for API containers we will run in Fargate.
   # Two rules, allowing network traffic from a public facing load
   # balancer and from other members of the security group.
@@ -467,6 +496,11 @@ Outputs:
     Value: !Ref 'FargateContainerSecurityGroup'
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'FargateContainerSecurityGroup' ] ]
+  FargateContainerDBSecurityGroup:
+    Description: A security group used to allow Fargate containers to receive traffic
+    Value: !Ref 'FargateContainerDBSecurityGroup'
+    Export:
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'FargateContainerDBSecurityGroup' ] ]
   FargateContainerSecurityGroup2:
     Description: A security group used to allow Fargate containers to receive traffic
     Value: !Ref 'FargateContainerSecurityGroup2'
