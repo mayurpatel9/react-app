@@ -6,6 +6,7 @@ import * as ActivitiesStore from "../store/Activities";
 import { connect } from "react-redux";
 import { ApplicationState } from "../store";
 import { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
 
 interface IActivityDetail {
   id: string;
@@ -27,7 +28,7 @@ export const ActivityForm: React.FC<ActivitiesProps> = (
       setActivity(props.selectedActivity);
       }
     }
-  }, [props.loadingActivity, props.selectedActivity]);
+  }, [props.loadingActivity, props.selectedActivity, props.match.params.id]);
 
   const [activity, setActivity] = useState<IActivity>({
     id: "",
@@ -57,6 +58,7 @@ export const ActivityForm: React.FC<ActivitiesProps> = (
       props.createActivity(newActivity);
     }
   };
+
 
   return (
     <Segment clearing>
@@ -107,6 +109,8 @@ export const ActivityForm: React.FC<ActivitiesProps> = (
           loading={props.target === "" && props.submitting}
         />
         <Button
+          as={Link}
+          to={`/activities/${props.match.params.id}`}
           floated="right"
           type="button"
           content="Cancel"

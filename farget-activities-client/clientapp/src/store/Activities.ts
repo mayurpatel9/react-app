@@ -3,7 +3,6 @@ import { AppThunkAction } from "./";
 import { IActivity } from "../app/layout/model/activity";
 import agent from "../api/agent";
 import { SyntheticEvent } from "react";
-import { isBuffer } from "util";
 
 export interface ActivityState {
   activities: IActivity[];
