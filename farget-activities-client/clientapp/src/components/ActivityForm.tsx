@@ -21,14 +21,18 @@ export const ActivityForm: React.FC<ActivitiesProps> = (
   props: ActivitiesProps
 ) => {
 
+  var activityId = props.match.params.id;
+  var selectedActivity = props.selectedActivity;
+  var loadingActivity = props.loadingActivity;
+
   useEffect(() => {
-    if (props.match.params.id) {
-      props.loadingActivity(props.match.params.id);
-      if(props.selectedActivity){
-      setActivity(props.selectedActivity);
+    if (activityId) {
+      loadingActivity(activityId);
+      if (selectedActivity){
+        setActivity(selectedActivity);
       }
     }
-  }, [props.loadingActivity, props.selectedActivity, props.match.params.id]);
+  }, [loadingActivity, selectedActivity, activityId]);
 
   const [activity, setActivity] = useState<IActivity>({
     id: "",

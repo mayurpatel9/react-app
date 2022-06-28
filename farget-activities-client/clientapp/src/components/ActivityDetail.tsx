@@ -20,9 +20,13 @@ type ActivitiesProps = ActivitiesStore.ActivityState &
 export const ActivityDetail: React.FC<ActivitiesProps> = (
   props: ActivitiesProps
 ) => {
+
+  var loadingActivity = props.loadingActivity;
+  var activityId = props.match.params.id;
+
   useEffect(() => {
-    props.loadingActivity(props.match.params.id);
-  }, [props.loadingActivity, props.match.params.id]);
+    loadingActivity(activityId);
+  }, [loadingActivity, activityId]);
 
   if (props.loading || !props.selectedActivity)
     return <Loading content="Loading Activities ...." />;
