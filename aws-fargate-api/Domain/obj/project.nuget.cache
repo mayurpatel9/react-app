@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qDUaYA8fIcuHJGs5hSZL4mTtwUcS8Ro5MxbdJZb5RHJGO9N4hS5RqdY86Z2/0OjqH/VHtxH0nwvAgPyyJf5dHQ==",
+  "dgSpecHash": "pcoFA5/MC/47suAybjx9Sk3CwuVNfmThGT2ZR94s7My61Ud9luJvxZ9KBvhE58xUQOvewU4kAmA8HnUE0H3lXw==",
   "success": true,
-  "projectFilePath": "C:\\aws\\aws-fargate-activities\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\github-personal\\react-app\\aws-fargate-api\\Domain\\Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

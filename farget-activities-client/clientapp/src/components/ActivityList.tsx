@@ -3,9 +3,8 @@ import * as ActivitiesStore from "../store/Activities";
 import { IActivity } from "../app/layout/model/activity";
 import { connect } from "react-redux";
 import { ApplicationState } from "../store";
-import { Item, Segment, Button } from "semantic-ui-react";
+import { Item, Segment } from "semantic-ui-react";
 import { Loading } from "./Loading";
-import { Link } from "react-router-dom";
 import { ActivityListItem } from "./ActivitiListItem";
 
 // At runtime, Redux will merge together...

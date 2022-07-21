@@ -195,10 +195,7 @@ export const actionCreators = {
     dispatch({ type: "REQUEST_CANCEL_EDIT_ACTIVITY_FORM" });
   },
 
-  deleteActivity: (
-    event: SyntheticEvent<HTMLButtonElement>,
-    id: string
-  ): AppThunkAction<KnownAction> => (dispatch, getState) => {
+  deleteActivity: (event: SyntheticEvent<HTMLButtonElement>,id: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
     dispatch({
       type: "PRE_DELETE_ACTIVITY",
       targetName: event.currentTarget.name,
